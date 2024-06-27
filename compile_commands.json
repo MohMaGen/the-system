@@ -1,1 +1,17 @@
-[]
+[
+  {
+    "file": "target/the-system/debug/the-system.o",
+    "directory": "/projects/programming/system",
+    "arguments": ["-Wall", "-Werror", "-pedantic", "-pedantic-errors", "-g", "-v", "-I./utils/inc/", "-L./target/the-system/debug/", "-lutils"]
+  },
+  {
+    "file": "target/the-system-cli/debug/the-system-cli.o",
+    "directory": "/projects/programming/system",
+    "arguments": ["-Wall", "-Werror", "-pedantic", "-pedantic-errors", "-g", "-v", "-I", "utils/inc/", "-L./target/the-system-cli/debug/", "-lutils"]
+  },
+  {
+    "file": "target/utils/debug/greet.o",
+    "directory": "/projects/programming/system",
+    "arguments": ["-Wall", "-Werror", "-pedantic", "-pedantic-errors", "-g", "-v", "-I"]
+  }
+]

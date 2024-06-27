@@ -29,6 +29,8 @@ UTILS_SOURCES := $(wildcard $(UTILS_SOURCE_DIR)*.c)
 UTILS_DEBUG_OBJECTS := $(patsubst $(UTILS_SOURCE_DIR)%.c,$(UTILS_BUILD_DIR)debug/%.o,$(UTILS_SOURCES))
 UTILS_RELEASE_OBJECTS := $(patsubst $(UTILS_SOURCE_DIR)%.c,$(UTILS_BUILD_DIR)release/%.o,$(UTILS_SOURCES))
 UTILS_LD_FLAGS :=
+UTILS_DEBUG_LD_FLAGS := $(UTILS_LD_FLAGS)
+UTILS_DEBUG_FLAGS := $(CCWARNINGS) $(CCDEBUG) -I $(UTILS_INCLUDE)
 UTILS_DEBUG = $(UTILS_BUILD_DIR)debug/utils.a
 UTILS_RELEASE = $(UTILS_BUILD_DIR)release/utils.a
 UTILS_INCLUDE = $(UTILS_SOURCE_DIR)inc/
@@ -120,3 +122,43 @@ link-the-system-libs-release:
 	ln -f $(UTILS_RELEASE) $(THESYSTEM_BUILD_DIR)release/libutils.a
 
 
+
+#                            _ _
+#   ___ ___  _ __ ___  _ __ (_) | ___     ___ ___  _ __ ___  _ __ ___   __ _ 
+#  / __/ _ \| '_ ` _ \| '_ \| | |/ _ \   / __/ _ \| '_ ` _ \| '_ ` _ \ / _` |
+# | (_| (_) | | | | | | |_) | | |  __/  | (_| (_) | | | | | | | | | | | (_| |
+#  \___\___/|_| |_| |_| .__/|_|_|\___|___\___\___/|_| |_| |_|_| |_| |_|\__,_|
+#                     |_|           |_____|
+#            _        _
+#  _ __   __| |___   (_)___  ___  _ __
+# | '_ \ / _` / __|  | / __|/ _ \| '_ \
+# | | | | (_| \__ \_ | \__ \ (_) | | | |
+# |_| |_|\__,_|___(_)/ |___/\___/|_| |_|
+#                   |__/
+
+COMPILE_COMMANDS_THESYSTEM_S = $(THESYSTEM_DEBUG_OBJECTS)
+COMPILE_COMMANDS_THESYSTEM = $(patsubst $(THESYSTEM_BUILD_DIR)debug/%.o, CC_THESYSTEM_%.o, $(COMPILE_COMMANDS_THESYSTEM_S))
+
+COMPILE_COMMANDS_THESYSTEM_CLI_S = $(THESYSTEM_CLI_DEBUG_OBJECTS)
+COMPILE_COMMANDS_THESYSTEM_CLI = $(patsubst $(THESYSTEM_CLI_BUILD_DIR)debug/%.o, CC_THESYSTEM_CLI_%.o, $(COMPILE_COMMANDS_THESYSTEM_CLI_S))
+
+COMPILE_COMMANDS_UTILS_S = $(UTILS_DEBUG_OBJECTS)
+COMPILE_COMMANDS_UTILS = $(patsubst $(UTILS_BUILD_DIR)debug/%.o, CC_UTILS_%.o, $(COMPILE_COMMANDS_UTILS_S))
+
+compile-commands.json: reset-compile-commands.json $(COMPILE_COMMANDS_THESYSTEM) $(COMPILE_COMMANDS_THESYSTEM_CLI) $(COMPILE_COMMANDS_UTILS)
+	cat ./compile_commands.json | head -n -1 > tmp.json; mv tmp.json ./compile_commands.json
+	echo "  }" >> ./compile_commands.json
+	echo "]" >> ./compile_commands.json
+	@echo "done compile commands"
+
+reset-compile-commands.json:
+	echo "[" > ./compile_commands.json
+
+$(COMPILE_COMMANDS_THESYSTEM): CC_THESYSTEM_%.o: $(THESYSTEM_BUILD_DIR)debug/%.o
+	bash ./push_comile_commands_obj.sh $< $(THESYSTEM_DEBUG_FLAGS) $(THESYSTEM_DEBUG_LD_FLAGS)
+
+$(COMPILE_COMMANDS_THESYSTEM_CLI): CC_THESYSTEM_CLI_%.o: $(THESYSTEM_CLI_BUILD_DIR)debug/%.o
+	bash ./push_comile_commands_obj.sh $< $(THESYSTEM_CLI_DEBUG_FLAGS) $(THESYSTEM_CLI_DEBUG_LD_FLAGS)
+
+$(COMPILE_COMMANDS_UTILS): CC_UTILS_%.o: $(UTILS_BUILD_DIR)debug/%.o
+	bash ./push_comile_commands_obj.sh $< $(UTILS_DEBUG_FLAGS) $(UTILS_DEBUG_LD_FLAGS)
