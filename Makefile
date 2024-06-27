@@ -7,9 +7,13 @@ CCRELEASE := -O3
 
 TARGET_DIR := target/
 
-build-debug: the-system-debug the-system-cli-debug
 
-build-release: the-system-release the-system-cli-release
+mk_dirs:
+	bash ./mk_dirs.sh
+
+build-debug: mk_dirs the-system-debug the-system-cli-debug
+
+build-release: mk_dirs the-system-release the-system-cli-release
 
 
 #       _   _ _
