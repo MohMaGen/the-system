@@ -1,5 +1,13 @@
 # the-system
 
+
+## Building
+
+### Dependencies
+- ```bash```
+- ```make```
+- ```gcc```/```clang```
+
 ## Development.
 
 ### Compile commands generation.
