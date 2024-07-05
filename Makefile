@@ -66,6 +66,12 @@ THESYSTEM_CLI_INCLUDE_FLAGS := -I $(UTILS_INCLUDE)
 THESYSTEM_CLI_DEBUG_FLAGS = $(CCWARNINGS) $(CCDEBUG) $(THESYSTEM_CLI_INCLUDE_FLAGS)
 THESYSTEM_CLI_RELEASE_FLAGS = $(CCWARNINGS) $(CCRELEASE)  $(THESYSTEM_CLI_INCLUDE_FLAGS)
 
+the-system-cli-run: the-system-cli-debug
+	$(THESYSTEM_CLI_BUILD_DIR)debug/the-system
+
+the-system-cli-gdb: the-system-cli-debug
+	gdb $(THESYSTEM_CLI_BUILD_DIR)debug/the-system
+
 the-system-cli-debug: link-the-system-cli-libs-debug utils-debug $(THESYSTEM_CLI_DEBUG_OBJECTS)
 	$(CC) -o $(THESYSTEM_CLI_BUILD_DIR)debug/the-system $(THESYSTEM_CLI_DEBUG_OBJECTS) $(THESYSTEM_CLI_DEBUG_FLAGS) $(THESYSTEM_CLI_DEBUG_LD_FLAGS)
 
@@ -102,6 +108,12 @@ THESYSTEM_RELEASE_LD_FLAGS := -L./$(THESYSTEM_BUILD_DIR)release/ $(THESYSTEM_LD_
 THESYSTEM_INCLUDE_FLAGS := -I./$(UTILS_INCLUDE)
 THESYSTEM_DEBUG_FLAGS = $(CCWARNINGS) $(CCDEBUG) $(THESYSTEM_INCLUDE_FLAGS)
 THESYSTEM_RELEASE_FLAGS = $(CCWARNINGS) $(CCRELEASE)  $(THESYSTEM_INCLUDE_FLAGS)
+
+the-system-run: the-system-debug
+	$(THESYSTEM_BUILD_DIR)debug/the-system
+
+the-system-gdb: the-system-debug
+	gdb $(THESYSTEM_BUILD_DIR)debug/the-system
 
 the-system-debug: utils-debug link-the-system-libs-debug $(THESYSTEM_DEBUG_OBJECTS)
 	$(CC) -o $(THESYSTEM_BUILD_DIR)debug/the-system $(THESYSTEM_DEBUG_OBJECTS) $(THESYSTEM_DEBUG_FLAGS) $(THESYSTEM_DEBUG_LD_FLAGS)
